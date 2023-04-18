@@ -57,7 +57,11 @@ exports.onRenderBody = (
         pluginConfig.respectDNT
           ? `!(navigator.doNotTrack == "1" || window.doNotTrack == "1")`
           : `true`
-      }) {
+      }${
+    pluginConfig.consentKey
+      ? ` && window.localStorage.getItem("${pluginConfig.consentKey}") === "true"`
+      : ``
+  }) {
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());

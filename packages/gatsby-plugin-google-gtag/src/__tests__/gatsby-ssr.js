@@ -82,6 +82,46 @@ describe(`respectDNT`, () => {
   })
 })
 
+describe(`consentKey`, () => {
+  it(`defaults consentKey option to undefined`, () => {
+    const mocks = {
+      setHeadComponents: jest.fn(),
+      setPostBodyComponents: jest.fn(),
+    }
+    const pluginOptions = {
+      trackingIds: [`GA_TRACKING_ID`],
+      pluginConfig: {},
+    }
+
+    onRenderBody(mocks, pluginOptions)
+    const [, config] = mocks.setPostBodyComponents.mock.calls[0][0]
+
+    expect(config.props.dangerouslySetInnerHTML.__html).not.toContain(
+      `window.localStorage.getItem`
+    )
+  })
+
+  it(`listens to consentKey option`, () => {
+    const mocks = {
+      setHeadComponents: jest.fn(),
+      setPostBodyComponents: jest.fn(),
+    }
+    const pluginOptions = {
+      trackingIds: [`GA_TRACKING_ID`],
+      pluginConfig: {
+        consentKey: `example_key`,
+      },
+    }
+
+    onRenderBody(mocks, pluginOptions)
+    const [, config] = mocks.setPostBodyComponents.mock.calls[0][0]
+
+    expect(config.props.dangerouslySetInnerHTML.__html).toContain(
+      ` && window.localStorage.getItem("example_key") === "true"`
+    )
+  })
+})
+
 describe(`selfHostedOrigin`, () => {
   it(`should set selfHostedOrigin as googletagmanager.com by default`, () => {
     const mocks = {

@@ -52,6 +52,8 @@ module.exports = {
           origin: "YOUR_SELF_HOSTED_ORIGIN",
           // Delays processing pageview events on route update (in milliseconds)
           delayOnRouteUpdate: 0,
+          // Key in local store where user consent is persisted
+          consentKey: "example_localstore_key",
         },
       },
     },
@@ -143,3 +145,7 @@ If you need to exclude any path from the tracking system, you can add it (one or
 ## The "pluginConfig.delayOnRouteUpdate" option
 
 If you need to delay processing pageview events on route update (e.g. to wait for page transitions with [`gatsby-plugin-transition-link`](https://www.gatsbyjs.com/plugins/gatsby-plugin-transition-link/)), then this option adds a delay before generating the pageview event.
+
+### "pluginConfig.consentKey" option
+
+When adding a `consentKey`, the plugin looks for the existence and the value of that key in the local storage of the browser. If the key exists and it's value equals `"true"`, the plugin works as usual, but otherwise nothing is being tracked.
